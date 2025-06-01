@@ -1,0 +1,14 @@
+# Node.js frontend and backend
+bytebazaar-frontend/node_modules/
+bytebazaar-frontend/build/
+bytebazaar-frontend/.env
+
+bytebazaar-backend/node_modules/
+bytebazaar-backend/src/services/service-account.json
+bytebazaar-backend/dist/
+bytebazaar-backend/.env
+
+# OS/Editor files
+.DS_Store
+Thumbs.db
+*.log

@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes';
 import projectRoutes from './routes/project.routes';
+import categoryRoutes from './routes/category.routes';
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,7 @@ app.use(cors({
 
 app.use('/api/auth', authRoutes); // 🧠 Here
 app.use('/api/projects', projectRoutes);
+app.use('/api/categories', categoryRoutes);
 
 mongoose.connect(process.env.MONGO_URI as string).then(() => {
     console.log('✅ MongoDB connected');

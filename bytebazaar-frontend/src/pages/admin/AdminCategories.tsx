@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCategories, selectCategoryLoading, selectCategoryError, setCategories, addCategory, updateCategory, deleteCategory } from '@/store/slices/categorySlice';
+import {  selectCategoryLoading, selectCategoryError, setCategories, updateCategory, deleteCategory, createCategory, selectAllCategories, fetchCategories } from '@/store/slices/categorySlice';
 import { categoriesApi } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,7 +13,7 @@ import { toast } from '@/components/ui/use-toast';
 
 const AdminCategories = () => {
   const dispatch = useDispatch();
-  const categories = useSelector(selectCategories);
+  const categories = useSelector(selectAllCategories);
   const loading = useSelector(selectCategoryLoading);
   const error = useSelector(selectCategoryError);
 
@@ -51,33 +51,44 @@ const AdminCategories = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+  
     try {
       if (editingCategory) {
-        const response = await categoriesApi.update(editingCategory._id, formData);
-        dispatch(updateCategory(response.data));
-        toast({
-          title: 'Success',
-          description: 'Category updated successfully'
-        });
+        const resultAction = await dispatch(updateCategory({ id: editingCategory._id, data: formData }) as any);
+
+        if (updateCategory.fulfilled.match(resultAction)) {
+          toast({
+            title: 'Success',
+            description: 'Category updated successfully',
+          });
+        } else {
+          throw new Error('Update failed');
+        }
       } else {
-        const response = await categoriesApi.create(formData);
-        dispatch(addCategory(response.data));
-        toast({
-          title: 'Success',
-          description: 'Category created successfully'
-        });
+        const resultAction = await dispatch(createCategory(formData) as any);
+        if (createCategory.fulfilled.match(resultAction)) {
+          toast({
+            title: 'Success',
+            description: 'Category created successfully',
+          });
+        } else {
+          throw new Error('Creation failed');
+        }
       }
+      
       setFormData({ name: '', description: '' });
       setEditingCategory(null);
       setIsAddDialogOpen(false);
+      await categoriesApi.getAll();
+  
     } catch (error) {
       toast({
         title: 'Error',
         description: 'Failed to save category',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
-  };
+  }
 
   const handleEdit = (category: any) => {
     setEditingCategory(category);
@@ -91,17 +102,22 @@ const AdminCategories = () => {
   const handleDelete = async (categoryId: string) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await categoriesApi.delete(categoryId);
-        dispatch(deleteCategory(categoryId));
-        toast({
-          title: 'Success',
-          description: 'Category deleted successfully'
-        });
+        const resultAction = await dispatch(deleteCategory(categoryId)as any);
+  
+        if (deleteCategory.fulfilled.match(resultAction)) {
+          toast({
+            title: 'Success',
+            description: 'Category deleted successfully',
+          });
+        } else {
+          throw new Error('Delete failed');
+        }
+  
       } catch (error) {
         toast({
           title: 'Error',
           description: 'Failed to delete category',
-          variant: 'destructive'
+          variant: 'destructive',
         });
       }
     }

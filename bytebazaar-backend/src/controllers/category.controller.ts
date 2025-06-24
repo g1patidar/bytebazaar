@@ -14,12 +14,12 @@ export const getAllCategories = async (req: Request, res: Response) => {
 // POST /api/categories
 export const createCategory = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { name } = req.body;
-
+    const { name, description } = req.body;
+    console.log(name, 'name');
     const existing = await Category.findOne({ name });
     if (existing) return res.status(400).json({ message: 'Category already exists' });
 
-    const category = new Category({ name });
+    const category = new Category({ name, description });
     await category.save();
 
     res.status(201).json({ message: 'Category created successfully', category });

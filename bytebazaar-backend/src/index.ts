@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     origin: (origin, callback) => {
+        console.log("origin:",origin)
         const allowedOrigins = [process.env.CLIENT_URL, 'http://localhost:8080'];
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);

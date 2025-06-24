@@ -3,7 +3,11 @@ import { GoogleAuth, OAuth2Client } from 'google-auth-library';
 import fs from 'fs';
 import path from 'path';
 
-const credentials = require('./service-account.json');
+const credentials = {web: {
+  client_id:'hjfthg',
+  client_secret:"hfgtgch",
+  redirect_uris :["localhost:800998"]
+}}; // require('./service-account.json')
 
 const oauth2Client = new OAuth2Client(
   credentials.web.client_id,

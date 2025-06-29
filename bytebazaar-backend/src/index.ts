@@ -14,21 +14,21 @@ const allowedOrigins = [process.env.CLIENT_URL, 'http://localhost:8080'];
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-}));
-
 // app.use(cors({
-//     origin: true,  // Reflects the request origin (as allowed)
-//     credentials: true
-//   }));
+//     origin: (origin, callback) => {
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     },
+//     credentials: true,
+// }));
+
+app.use(cors({
+    origin: true,  // Reflects the request origin (as allowed)
+    credentials: true
+  }));
 
 app.use('/api/auth', authRoutes); // 🧠 Here
 app.use('/api/projects', projectRoutes);

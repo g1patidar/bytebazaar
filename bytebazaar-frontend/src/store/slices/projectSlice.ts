@@ -128,6 +128,7 @@ export const addProject = createAsyncThunk<Project, FormData>(
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true
       });
       return response.data;
     } catch (error: any) {

@@ -36,7 +36,10 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await axiosPublic.post('/auth/login', { email, password });
+      const response = await axiosPublic.post('/auth/login', { email, password },{
+        headers:{'Content-Type': 'application/json'},
+        withCredentials: true
+      });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Login failed');
